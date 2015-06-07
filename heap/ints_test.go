@@ -6,8 +6,8 @@ import (
 	"github.com/golangplus/testing/assert"
 )
 
-func TestIntHeap_DefLess(t *testing.T) {
-	var h IntHeap
+func TestInts_DefLess(t *testing.T) {
+	var h Ints
 
 	assert.Equal(t, "len", h.Len(), 0)
 
@@ -22,10 +22,10 @@ func TestIntHeap_DefLess(t *testing.T) {
 	assert.StringEqual(t, "res", res, []int{1, 2, 3, 5})
 }
 
-func TestIntHeap_CustomLess(t *testing.T) {
+func TestInts_CustomLess(t *testing.T) {
 	data := [...]int{5, 2, 1, 3}
 
-	h := NewIntHeap(func(i, j int) bool {
+	h := NewInts(func(i, j int) bool {
 		return data[i] < data[j]
 	}, 5)
 
