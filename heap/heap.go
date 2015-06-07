@@ -45,7 +45,7 @@ func Init(h sort.Interface) {
 	// heapify
 	n := h.Len()
 	for i := n/2 - 1; i >= 0; i-- {
-		down(h, i, n)
+		heapDown(h, i, n)
 	}
 }
 
@@ -56,7 +56,7 @@ func Init(h sort.Interface) {
 // NOTE You need to append the element to be pushed as the last element before
 // calling to this method.
 func PushLast(h sort.Interface) {
-	up(h, h.Len()-1)
+	heapUp(h, h.Len()-1)
 }
 
 // Pop removes the minimum element (according to Less) from the heap
@@ -78,7 +78,7 @@ func PopToLast(h sort.Interface) {
 // The complexity is O(log(N)), where N = h.Len().
 func Fix(h sort.Interface, index int) {
 	heapDown(h, index, h.Len())
-    heapUp(h, index)
+	heapUp(h, index)
 }
 
 // Remove removes the element at index i from the heap and place it at the last
@@ -124,6 +124,6 @@ func heapDown(h sort.Interface, i, n int) {
 			break
 		}
 		h.Swap(i, c)
-		i = c  // move to lower level
+		i = c // move to lower level
 	}
 }

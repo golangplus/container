@@ -8,9 +8,9 @@ import (
 	"github.com/golangplus/testing/assert"
 )
 
-type IntHeap []int
+type intHeap []int
 
-func (h *IntHeap) Pop() int {
+func (h *intHeap) Pop() int {
 	PopToLast(sort.IntSlice(*h))
 	res := (*h)[len(*h)-1]
 	*h = (*h)[:len(*h)-1]
@@ -18,13 +18,13 @@ func (h *IntHeap) Pop() int {
 	return res
 }
 
-func (h *IntHeap) Push(x int) {
+func (h *intHeap) Push(x int) {
 	*h = append(*h, x)
 	PushLast(sort.IntSlice(*h))
 }
 
 func TestIntHeap(t *testing.T) {
-	var h IntHeap
+	var h intHeap
 
 	for i := 0; i < 1000; i++ {
 		h.Push(rand.Int())
