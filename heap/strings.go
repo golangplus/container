@@ -24,7 +24,7 @@ func (h *Strings) Push(x string) {
 	if h.less == nil {
 		PushLast(sort.StringSlice(h.list))
 	} else {
-		PushLastFunc(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+		PushLastF(len(h.list), h.less, sort.StringSlice(h.list).Swap)
 	}
 }
 
@@ -33,7 +33,7 @@ func (h *Strings) Pop() string {
 	if h.less == nil {
 		PopToLast(sort.StringSlice(h.list))
 	} else {
-		PopToLastFunc(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+		PopToLastF(len(h.list), h.less, sort.StringSlice(h.list).Swap)
 	}
 
 	res := h.list[len(h.list)-1]

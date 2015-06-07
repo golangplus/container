@@ -24,7 +24,7 @@ func (h *Float64s) Push(x float64) {
 	if h.less == nil {
 		PushLast(sort.Float64Slice(h.list))
 	} else {
-		PushLastFunc(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
+		PushLastF(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
 	}
 }
 
@@ -33,7 +33,7 @@ func (h *Float64s) Pop() float64 {
 	if h.less == nil {
 		PopToLast(sort.Float64Slice(h.list))
 	} else {
-		PopToLastFunc(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
+		PopToLastF(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
 	}
 
 	res := h.list[len(h.list)-1]

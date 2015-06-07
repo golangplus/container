@@ -50,7 +50,7 @@ func Init(h sort.Interface) {
 }
 
 // Similar to Init but with interface provided by funcs.
-func InitFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+func InitF(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
 	// heapify
 	for i := Len/2 - 1; i >= 0; i-- {
 		heapDown(Len, Less, Swap, i)
@@ -68,7 +68,7 @@ func PushLast(h sort.Interface) {
 }
 
 // Similar to PushLast but with interface provided by funcs.
-func PushLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+func PushLastF(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
 	heapUp(Less, Swap, Len-1)
 }
 
@@ -86,7 +86,7 @@ func PopToLast(h sort.Interface) {
 }
 
 // Similar to PopToLast but with interface provided by funcs.
-func PopToLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+func PopToLastF(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
 	Swap(0, Len-1)
 	heapDown(Len-1, Less, Swap, 0)
 }
@@ -101,7 +101,7 @@ func Fix(h sort.Interface, index int) {
 }
 
 // Similar to Fix but with interface provided by funcs.
-func FixFunc(Len int, Less func(i, j int) bool, Swap func(i, j int), index int) {
+func FixF(Len int, Less func(i, j int) bool, Swap func(i, j int), index int) {
 	heapDown(Len, Less, Swap, index)
 	heapUp(Less, Swap, index)
 }
@@ -122,7 +122,7 @@ func RemoveToLast(h sort.Interface, i int) {
 }
 
 // Similar to RemoveToLast but with interface provided by funcs.
-func RemoveToLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int), i int) {
+func RemoveToLastF(Len int, Less func(i, j int) bool, Swap func(i, j int), i int) {
 	n := Len - 1
 	if n != i {
 		Swap(i, n)
