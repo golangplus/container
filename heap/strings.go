@@ -1,7 +1,14 @@
 package heap
 
+import (
+	"sort"
+)
+
+// A heap for strings. The pointer to the zero value of Strings is a heap with default less
+// func which compares string values on the natual order.
+// Use NewStrings to customize less func and initial capacity.
 type Strings struct {
-	less func(x, y string) bool
+	less func(i, j int) bool
 	list []string
 }
 
@@ -10,29 +17,25 @@ func (h *Strings) Len() int {
 	return len(h.list)
 }
 
-// Less compares the i-th and j-th elemnts in the heap.
-func (h *Strings) Less(i, j int) bool {
-	if h.less == nil {
-		return h.list[i] < h.list[j]
-	}
-
-	return h.less(h.list[i], h.list[j])
-}
-
-// Swap exchanges values of the i-th and j-th elements.
-func (h *Strings) Swap(i, j int) {
-	h.list[i], h.list[j] = h.list[j], h.list[i]
-}
-
 // Push inserts an element to the heap.
 func (h *Strings) Push(x string) {
 	h.list = append(h.list, x)
-	PushLast(h)
+
+	if h.less == nil {
+		PushLast(sort.StringSlice(h.list))
+	} else {
+		PushLastFunc(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+	}
 }
 
 // Pop removes the top element from the heap and returns it.
 func (h *Strings) Pop() string {
-	PopToLast(h)
+	if h.less == nil {
+		PopToLast(sort.StringSlice(h.list))
+	} else {
+		PopToLastFunc(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+	}
+
 	res := h.list[len(h.list)-1]
 	h.list = h.list[:len(h.list)-1]
 
@@ -41,8 +44,14 @@ func (h *Strings) Pop() string {
 
 // NewInts returns a *Strings with customized less func and initial capacity.
 func NewStrings(less func(x, y string) bool, cap int) *Strings {
-	return &Strings{
-		less: less,
-		list: make([]string, 0, cap),
+	h := &Strings{}
+
+	h.less = func(i, j int) bool {
+		return less(h.list[i], h.list[j])
 	}
+	if cap > 0 {
+		h.list = make([]string, 0, cap)
+	}
+
+	return h
 }

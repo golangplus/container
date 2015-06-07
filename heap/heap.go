@@ -45,7 +45,15 @@ func Init(h sort.Interface) {
 	// heapify
 	n := h.Len()
 	for i := n/2 - 1; i >= 0; i-- {
-		heapDown(h, i, n)
+		heapDown(n, h.Less, h.Swap, i)
+	}
+}
+
+// Similar to Init but with interface provided by funcs.
+func InitFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+	// heapify
+	for i := Len/2 - 1; i >= 0; i-- {
+		heapDown(Len, Less, Swap, i)
 	}
 }
 
@@ -56,7 +64,12 @@ func Init(h sort.Interface) {
 // NOTE You need to append the element to be pushed as the last element before
 // calling to this method.
 func PushLast(h sort.Interface) {
-	heapUp(h, h.Len()-1)
+	heapUp(h.Less, h.Swap, h.Len()-1)
+}
+
+// Similar to PushLast but with interface provided by funcs.
+func PushLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+	heapUp(Less, Swap, Len-1)
 }
 
 // Pop removes the minimum element (according to Less) from the heap
@@ -69,7 +82,13 @@ func PushLast(h sort.Interface) {
 func PopToLast(h sort.Interface) {
 	n1 := h.Len() - 1
 	h.Swap(0, n1)
-	heapDown(h, 0, n1)
+	heapDown(n1, h.Less, h.Swap, 0)
+}
+
+// Similar to PopToLast but with interface provided by funcs.
+func PopToLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int)) {
+	Swap(0, Len-1)
+	heapDown(Len-1, Less, Swap, 0)
 }
 
 // Fix re-establishes the heap ordering after the value of the element at the index has changed.
@@ -77,8 +96,14 @@ func PopToLast(h sort.Interface) {
 // but less expensive than, calling RemoveToLast(h, index) followed by a PushLast.
 // The complexity is O(log(N)), where N = h.Len().
 func Fix(h sort.Interface, index int) {
-	heapDown(h, index, h.Len())
-	heapUp(h, index)
+	heapDown(h.Len(), h.Less, h.Swap, index)
+	heapUp(h.Less, h.Swap, index)
+}
+
+// Similar to Fix but with interface provided by funcs.
+func FixFunc(Len int, Less func(i, j int) bool, Swap func(i, j int), index int) {
+	heapDown(Len, Less, Swap, index)
+	heapUp(Less, Swap, index)
 }
 
 // Remove removes the element at index i from the heap and place it at the last
@@ -91,24 +116,34 @@ func RemoveToLast(h sort.Interface, i int) {
 	n := h.Len() - 1
 	if n != i {
 		h.Swap(i, n)
-		heapDown(h, i, n)
-		heapUp(h, i)
+		heapDown(n, h.Less, h.Swap, i)
+		heapUp(h.Less, h.Swap, i)
 	}
 }
 
-func heapUp(h sort.Interface, i int) {
+// Similar to RemoveToLast but with interface provided by funcs.
+func RemoveToLastFunc(Len int, Less func(i, j int) bool, Swap func(i, j int), i int) {
+	n := Len - 1
+	if n != i {
+		Swap(i, n)
+		heapDown(n, Less, Swap, i)
+		heapUp(Less, Swap, i)
+	}
+}
+
+func heapUp(less func(i, j int) bool, swap func(i, j int), i int) {
 	for i > 0 {
 		p := (i - 1) / 2 // p is the parent of i
-		if !h.Less(i, p) {
+		if !less(i, p) {
 			// h[p] <= h[i], already in order
 			break
 		}
-		h.Swap(i, p)
+		swap(i, p)
 		i = p // move to upper level
 	}
 }
 
-func heapDown(h sort.Interface, i, n int) {
+func heapDown(n int, less func(i, j int) bool, swap func(i, j int), i int) {
 	for {
 		l := 2*i + 1 // left child
 		if l >= n || l < 0 {
@@ -116,14 +151,14 @@ func heapDown(h sort.Interface, i, n int) {
 		}
 		c := l // c is initialized with l
 		// Set c to r if h[r] < h[l]
-		if r := l + 1; r < n && r > 0 && h.Less(r, l) {
+		if r := l + 1; r < n && r > 0 && less(r, l) {
 			c = r
 		}
-		if !h.Less(c, i) {
+		if !less(c, i) {
 			// h[i] <= h[c], already in order
 			break
 		}
-		h.Swap(i, c)
+		swap(i, c)
 		i = c // move to lower level
 	}
 }

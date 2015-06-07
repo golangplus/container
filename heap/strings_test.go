@@ -42,6 +42,6 @@ func TestStrings_CustomLess(t *testing.T) {
 	h.Push("Elmo")
 
 	assert.Equal(t, "len", h.Len(), 4)
-	res := []int{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
+	res := []string{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
 	assert.StringEqual(t, "res", res, []string{"Count", "Big Bird", "Elmo", "Abby"})
 }
