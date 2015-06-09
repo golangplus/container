@@ -87,7 +87,7 @@ func TestDataHeap(t *testing.T) {
 	for i := 1; i < 1000; i++ {
 		cur := h.Pop()
 		if cur.Priority < last.Priority {
-			t.Errorf("%d should be larger than %d", cur, last)
+			t.Errorf("%v should be larger than %v", cur, last)
 		}
 		last = cur
 	}
