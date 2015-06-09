@@ -51,20 +51,12 @@ type Data struct {
 
 type DataHeap []Data
 
-func (h DataHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
-}
-
-func (h DataHeap) Len() int {
-	return len(h)
-}
-
-func (h DataHeap) Less(i, j int) bool {
-	return h[i].Priority < h[j].Priority
-}
-
 func (h *DataHeap) Pop() Data {
-	PopToLast(h)
+	PopToLastF(len(*h), func(i, j int) bool {
+		return (*h)[i].Priority < (*h)[j].Priority
+	}, func(i, j int) {
+		(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+	})
 	res := (*h)[len(*h)-1]
 	*h = (*h)[:len(*h)-1]
 
@@ -73,7 +65,11 @@ func (h *DataHeap) Pop() Data {
 
 func (h *DataHeap) Push(x Data) {
 	*h = append(*h, x)
-	PushLast(h)
+	PushLastF(len(*h), func(i, j int) bool {
+		return (*h)[i].Priority < (*h)[j].Priority
+	}, func(i, j int) {
+		(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+	})
 }
 
 func TestDataHeap(t *testing.T) {

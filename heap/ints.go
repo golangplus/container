@@ -8,6 +8,7 @@ import (
 // func which compares int values on the natual order.
 // Use NewInts to customize less func and initial capacity.
 type Ints struct {
+	// Less func given indexes of i, j in the list slice.
 	less func(i, j int) bool
 	list []int
 }
@@ -43,8 +44,6 @@ func (h *Ints) Pop() int {
 }
 
 // NewInts returns a *Ints with customized less func and initial capacity.
-// NOTE unlike Ints.Less, the parameters of less are the integer values to be compared
-// not the indexes.
 func NewInts(less func(x, y int) bool, cap int) *Ints {
 	h := &Ints{}
 

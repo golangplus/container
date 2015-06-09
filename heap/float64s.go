@@ -42,7 +42,7 @@ func (h *Float64s) Pop() float64 {
 	return res
 }
 
-// NewInts returns a *Float64s with customized less func and initial capacity.
+// NewFloat64s returns a *Float64s with customized less func and initial capacity.
 func NewFloat64s(less func(x, y float64) bool, cap int) *Float64s {
 	h := &Float64s{}
 

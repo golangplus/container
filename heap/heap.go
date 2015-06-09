@@ -9,8 +9,9 @@ heap(priority queue) package except the elements are not necessarily
 interface{}, but can be any type.
 
 The trick is to use the last element as the in/out place. Push/Pop/Remove are
-replaced with PushLast/PopToLast/RemoveToLast, respectively. An heap with int
-value can be easily implemented as follow:
+replaced with PushLast/PopToLast/RemoveToLast, respectively.
+
+A heap with int value can be easily implemented as follow:
 
     type IntHeap []int
     func (h *IntHeap) Pop() int {
@@ -33,6 +34,34 @@ Use of the IntHeap:
 	hp.Push(4)
 	...
 	value := hp.Pop()
+
+PushLastF/PopToLastF/RemoveToLastF takes funcs other than sort.Interface as the argument.
+E.g., a heap with type T value can be implemented as follow:
+
+	type THeap []T
+	func (h *THeap) Pop() T {
+		heap.PopToLastF(len(*h), func(i, j int) bool {
+			ti, tj := (*h)[i], (*h)h[j]
+			// return whether ti < tj
+		}, func(i, j int) {
+			(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+		})
+
+        res := (*h)[len(*h) - 1]
+        *h = (*h)[:len(*h) - 1]
+
+        return res
+	}
+
+	func (h *THeap) Push(x T) {
+        *h = append(*h, x)
+        heap.PushLastF(len(*h), func(i, j int) bool {
+			ti, tj := (*h)[i], (*h)h[j]
+			// return whether ti < tj
+		}, func(i, j int) {
+			(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+		})
+	}
 */
 package heap
 

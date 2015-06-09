@@ -42,7 +42,7 @@ func (h *Strings) Pop() string {
 	return res
 }
 
-// NewInts returns a *Strings with customized less func and initial capacity.
+// NewStrings returns a *Strings with customized less func and initial capacity.
 func NewStrings(less func(x, y string) bool, cap int) *Strings {
 	h := &Strings{}
 
