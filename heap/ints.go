@@ -10,7 +10,7 @@ import (
 type Ints struct {
 	// Less func given indexes of i, j in the list slice.
 	less func(i, j int) bool
-	list []int
+	list sort.IntSlice
 }
 
 // Len returns the number of elements in the current heap.
@@ -23,18 +23,18 @@ func (h *Ints) Push(x int) {
 	h.list = append(h.list, x)
 
 	if h.less == nil {
-		PushLast(sort.IntSlice(h.list))
+		PushLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PushLastF(len(h.list), h.less, sort.IntSlice(h.list).Swap)
+		PushLastF(len(h.list), h.less, h.list.Swap)
 	}
 }
 
 // Pop removes the top element from the heap and returns it.
 func (h *Ints) Pop() int {
 	if h.less == nil {
-		PopToLast(sort.IntSlice(h.list))
+		PopToLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PopToLastF(len(h.list), h.less, sort.IntSlice(h.list).Swap)
+		PopToLastF(len(h.list), h.less, h.list.Swap)
 	}
 
 	res := h.list[len(h.list)-1]
@@ -47,11 +47,13 @@ func (h *Ints) Pop() int {
 func NewInts(less func(x, y int) bool, cap int) *Ints {
 	h := &Ints{}
 
-	h.less = func(i, j int) bool {
-		return less(h.list[i], h.list[j])
+	if less != nil {
+		h.less = func(i, j int) bool {
+			return less(h.list[i], h.list[j])
+		}
 	}
 	if cap > 0 {
-		h.list = make([]int, 0, cap)
+		h.list = make(sort.IntSlice, 0, cap)
 	}
 
 	return h

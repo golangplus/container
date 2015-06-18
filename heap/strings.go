@@ -9,7 +9,7 @@ import (
 // Use NewStrings to customize less func and initial capacity.
 type Strings struct {
 	less func(i, j int) bool
-	list []string
+	list sort.StringSlice
 }
 
 // Len returns the number of elements in the current heap.
@@ -22,18 +22,18 @@ func (h *Strings) Push(x string) {
 	h.list = append(h.list, x)
 
 	if h.less == nil {
-		PushLast(sort.StringSlice(h.list))
+		PushLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PushLastF(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+		PushLastF(len(h.list), h.less, h.list.Swap)
 	}
 }
 
 // Pop removes the top element from the heap and returns it.
 func (h *Strings) Pop() string {
 	if h.less == nil {
-		PopToLast(sort.StringSlice(h.list))
+		PopToLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PopToLastF(len(h.list), h.less, sort.StringSlice(h.list).Swap)
+		PopToLastF(len(h.list), h.less, h.list.Swap)
 	}
 
 	res := h.list[len(h.list)-1]
@@ -46,8 +46,10 @@ func (h *Strings) Pop() string {
 func NewStrings(less func(x, y string) bool, cap int) *Strings {
 	h := &Strings{}
 
-	h.less = func(i, j int) bool {
-		return less(h.list[i], h.list[j])
+	if less != nil {
+		h.less = func(i, j int) bool {
+			return less(h.list[i], h.list[j])
+		}
 	}
 	if cap > 0 {
 		h.list = make([]string, 0, cap)

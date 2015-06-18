@@ -9,7 +9,7 @@ import (
 // Use NewFloat64s to customize less func and initial capacity.
 type Float64s struct {
 	less func(i, j int) bool
-	list []float64
+	list sort.Float64Slice
 }
 
 // Len returns the number of elements in the current heap.
@@ -22,18 +22,18 @@ func (h *Float64s) Push(x float64) {
 	h.list = append(h.list, x)
 
 	if h.less == nil {
-		PushLast(sort.Float64Slice(h.list))
+		PushLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PushLastF(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
+		PushLastF(len(h.list), h.less, h.list.Swap)
 	}
 }
 
 // Pop removes the top element from the heap and returns it.
 func (h *Float64s) Pop() float64 {
 	if h.less == nil {
-		PopToLast(sort.Float64Slice(h.list))
+		PopToLastF(len(h.list), h.list.Less, h.list.Swap)
 	} else {
-		PopToLastF(len(h.list), h.less, sort.Float64Slice(h.list).Swap)
+		PopToLastF(len(h.list), h.less, h.list.Swap)
 	}
 
 	res := h.list[len(h.list)-1]
@@ -46,8 +46,10 @@ func (h *Float64s) Pop() float64 {
 func NewFloat64s(less func(x, y float64) bool, cap int) *Float64s {
 	h := &Float64s{}
 
-	h.less = func(i, j int) bool {
-		return less(h.list[i], h.list[j])
+	if less != nil {
+		h.less = func(i, j int) bool {
+			return less(h.list[i], h.list[j])
+		}
 	}
 	if cap > 0 {
 		h.list = make([]float64, 0, cap)
