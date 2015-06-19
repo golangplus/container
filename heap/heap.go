@@ -15,7 +15,7 @@ A heap with int value can be easily implemented as follow:
 
     type IntHeap []int
     func (h *IntHeap) Pop() int {
-      heap.PopToLast(sort.IntSlice(*h))
+      heap.PopToLast((*sort.IntSlice)(h))
       res := (*h)[len(*h) - 1]
       *h = (*h)[:len(*h) - 1]
 
@@ -24,7 +24,7 @@ A heap with int value can be easily implemented as follow:
 
     func (h *IntHeap) Push(x int) {
       *h = append(*h, x)
-      heap.PushLast(sort.IntSlice(*h))
+      heap.PushLast((*sort.IntSlice)(h))
     }
 
 Use of the IntHeap:
