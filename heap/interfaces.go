@@ -8,6 +8,10 @@ type Interfaces interface {
 	Push(x interface{})
 	// Pop removes the top element from the heap and returns it.
 	Pop() interface{}
+	// PopAll pops and returns all elements of the heap in reverse order.
+	PopAll() []interface{}
+	// Peek returns the top most element. It panics if the heap is empty.
+	Peek() interface{}
 }
 
 type interfaces struct {
@@ -39,6 +43,23 @@ func (h *interfaces) Pop() interface{} {
 	h.list = h.list[:len(h.list)-1]
 
 	return res
+}
+
+// Interfaces.PopAll
+func (h *interfaces) PopAll() []interface{} {
+	for n := h.Len(); n > 1; n-- {
+		PopToLastF(n, h.less, func(i, j int) {
+			h.list[i], h.list[j] = h.list[j], h.list[i]
+		})
+	}
+	res := h.list
+	h.list = nil
+	return res
+}
+
+// Interfaces.Peek
+func (h *interfaces) Peek() interface{} {
+	return h.list[0]
 }
 
 // NewInterfaces returns an instance of Interfaces with customized less func and initial capacity.

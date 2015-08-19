@@ -19,9 +19,16 @@ func TestInts_DefLess(t *testing.T) {
 	h.Push(3)
 
 	assert.Equal(t, "len", h.Len(), 4)
+	assert.Equal(t, "peek", h.Peek(), 1)
 
 	res := []int{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
-	assert.StringEqual(t, "res", res, []int{1, 2, 3, 5})
+	assert.Equal(t, "res", res, []int{1, 2, 3, 5})
+
+	h.Push(5)
+	h.Push(2)
+	h.Push(1)
+	h.Push(3)
+	assert.Equal(t, "PopAll", h.PopAll(), []int{5, 3, 2, 1})
 }
 
 func TestInts_CustomLess(t *testing.T) {
@@ -39,8 +46,15 @@ func TestInts_CustomLess(t *testing.T) {
 	h.Push(3)
 
 	assert.Equal(t, "len", h.Len(), 4)
+	assert.Equal(t, "peek", h.Peek(), 2)
 	res := []int{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
-	assert.StringEqual(t, "res", res, []int{2, 1, 3, 0})
+	assert.Equal(t, "res", res, []int{2, 1, 3, 0})
+
+	h.Push(0)
+	h.Push(1)
+	h.Push(2)
+	h.Push(3)
+	assert.Equal(t, "PopAll", h.PopAll(), []int{0, 3, 1, 2})
 }
 
 type builtinIntHeap []int

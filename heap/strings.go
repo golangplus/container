@@ -28,6 +28,11 @@ func (h *Strings) Push(x string) {
 	}
 }
 
+// Peek returns the top most element. It panics if the heap is empty.
+func (h *Strings) Peek() string {
+	return h.list[0]
+}
+
 // Pop removes the top element from the heap and returns it.
 func (h *Strings) Pop() string {
 	if h.less == nil {
@@ -39,6 +44,20 @@ func (h *Strings) Pop() string {
 	res := h.list[len(h.list)-1]
 	h.list = h.list[:len(h.list)-1]
 
+	return res
+}
+
+// PopAll pops and returns all elements of the heap in reverse order.
+func (h *Strings) PopAll() []string {
+	for n := h.Len(); n > 1; n-- {
+		if h.less == nil {
+			PopToLastF(n, h.list.Less, h.list.Swap)
+		} else {
+			PopToLastF(n, h.less, h.list.Swap)
+		}
+	}
+	res := h.list
+	h.list = nil
 	return res
 }
 

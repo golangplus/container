@@ -6,7 +6,7 @@
 Package heap is an alternative to the standard "heap" package.
 It implements a very similar function to the builtin
 heap(priority queue) package except the elements are not necessarily
-interface{}, but can be any type.
+interface{}, but can be of any type.
 
 The trick is to use the last element as the in/out place. Push/Pop/Remove are
 replaced with PushLast/PopToLast/RemoveToLast, respectively.

@@ -17,9 +17,16 @@ func TestFloat64s_DefLess(t *testing.T) {
 	h.Push(3)
 
 	assert.Equal(t, "len", h.Len(), 4)
+	assert.Equal(t, "peek", h.Peek(), 1.)
 
 	res := []float64{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
-	assert.StringEqual(t, "res", res, []float64{1, 2, 3, 5})
+	assert.Equal(t, "res", res, []float64{1, 2, 3, 5})
+
+	h.Push(5)
+	h.Push(2)
+	h.Push(1)
+	h.Push(3)
+	assert.Equal(t, "PopAll", h.PopAll(), []float64{5, 3, 2, 1})
 }
 
 func TestFloat64s_CustomLess(t *testing.T) {
@@ -35,7 +42,13 @@ func TestFloat64s_CustomLess(t *testing.T) {
 	h.Push(3)
 
 	assert.Equal(t, "len", h.Len(), 4)
-
+	assert.Equal(t, "peek", h.Peek(), 5.)
 	res := []float64{h.Pop(), h.Pop(), h.Pop(), h.Pop()}
 	assert.StringEqual(t, "res", res, []float64{5, 3, 2, 1})
+
+	h.Push(5)
+	h.Push(2)
+	h.Push(1)
+	h.Push(3)
+	assert.Equal(t, "PopAll", h.PopAll(), []float64{1, 2, 3, 5})
 }
