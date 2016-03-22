@@ -9,6 +9,36 @@ import (
 	"github.com/golangplus/testing/assert"
 )
 
+func TestInitF(t *testing.T) {
+	l := []int{5, 9, 1, 3, 2}
+	InitF(len(l), func(i, j int) bool { return l[i] < l[j] }, func(i, j int) { l[i], l[j] = l[j], l[i] })
+	assert.Equal(t, "l", l, []int{1, 2, 5, 3, 9})
+}
+
+func TestFix(t *testing.T) {
+	l := []int{1, 2, 5, 3, 9}
+	l[0] = 4
+	Fix(sort.IntSlice(l), 0)
+	assert.Equal(t, "l", l, []int{2, 3, 5, 4, 9})
+}
+
+func TestRemoveToLast(t *testing.T) {
+	l := []int{1, 2, 5, 3, 9}
+	RemoveToLast(sort.IntSlice(l), 0)
+	assert.Equal(t, "l", l, []int{2, 3, 5, 9, 1})
+}
+
+func TestRemoveToLastF(t *testing.T) {
+	l := []int{1, 2, 5, 3, 9}
+	RemoveToLastF(len(l), func(i, j int) bool { return l[i] < l[j] }, func(i, j int) { l[i], l[j] = l[j], l[i] }, 0)
+	assert.Equal(t, "l", l, []int{2, 3, 5, 9, 1})
+}
+
+func TestHeap_InitFromSlice(t *testing.T) {
+	h := sort.IntSlice{6, 5, 4, 3}
+	Init(h)
+}
+
 type intHeap []int
 
 func (h *intHeap) Pop() int {

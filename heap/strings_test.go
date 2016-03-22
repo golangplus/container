@@ -29,6 +29,13 @@ func TestStrings_DefLess(t *testing.T) {
 	assert.Equal(t, "PopAll", h.PopAll(), []string{"Elmo", "Count", "Big Bird", "Abby"})
 }
 
+func TestStrings_UnRef(t *testing.T) {
+	var h Strings
+	h.Push("Hello")
+	h.Pop()
+	assert.Equal(t, "h.list[0]", h.list[:1][0], "")
+}
+
 func TestStrings_CustomLess(t *testing.T) {
 	data := map[string]int{
 		"Abby":     5,

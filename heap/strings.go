@@ -42,6 +42,7 @@ func (h *Strings) Pop() string {
 	}
 
 	res := h.list[len(h.list)-1]
+	h.list[len(h.list)-1] = "" // remove the reference in h.list
 	h.list = h.list[:len(h.list)-1]
 
 	return res
@@ -61,7 +62,7 @@ func (h *Strings) PopAll() []string {
 	return res
 }
 
-// NewStrings returns a *Strings with customized less func and initial capacity.
+// NewStrings returns a *Strings with a customized less func and the initial capacity.
 func NewStrings(less func(x, y string) bool, cap int) *Strings {
 	h := &Strings{}
 
@@ -73,6 +74,5 @@ func NewStrings(less func(x, y string) bool, cap int) *Strings {
 	if cap > 0 {
 		h.list = make([]string, 0, cap)
 	}
-
 	return h
 }
